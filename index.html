@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/552/552448.png" type="image/png" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Weather Dashboard</h1>
+        </header>
+        <main>
+            <!-- Search Section -->
+            <section class="search">
+                <input id="city-input" type="text" placeholder="Enter city name" />
+                <button id="search-button">🔍</button>
+                <p id="error-message"></p>
+            </section>
+
+            <!-- Weather Info Section -->
+            <section class="weather-info" id="weather-info">
+                <h2 id="city-name">City Name</h2>
+                <p id="temperature">Temperature: -- °C</p>
+                <p id="humidity">Humidity: --%</p>
+                <p id="wind-speed">Wind Speed: -- km/h</p>
+            </section>
+
+            <!-- Chart and Map Section -->
+            <section class="chart-map-container">
+                <div class="chart-section">
+                    <canvas id="temperature-chart"></canvas>
+                </div>
+                <div class="map-section">
+                    <div id="map"></div>
+                </div>
+            </section>
+
+            <!-- Request Count Display -->
+            <div id="request-count">Requests made: 0 / 60</div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
