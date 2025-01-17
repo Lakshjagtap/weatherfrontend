@@ -1,4 +1,6 @@
-const BASE_URL = "https://api.openweathermap.org/data/2.5";
+// Replace BASE_URL with the deployed backend URL
+const BASE_URL = "https://weatherbackend-qb70.onrender.com/api"; // Replace with your actual backend URL
+
 const cityInput = document.getElementById("city-input");
 const searchButton = document.getElementById("search-button");
 const errorMessage = document.getElementById("error-message");
@@ -77,14 +79,14 @@ async function fetchWeatherData(city) {
     updateRequestCountDisplay();
 
     // Now we call the backend to get weather data (backend endpoint)
-    const response = await fetch(`/api/weather?city=${city}`);
+    const response = await fetch(`${BASE_URL}/weather?city=${city}`); // Updated to fetch from the deployed backend
     if (!response.ok) throw new Error("City not found");
     return response.json();
 }
 
 // Fetch forecast data from the backend
 async function fetchForecastData(city) {
-    const response = await fetch(`/api/forecast?city=${city}`);
+    const response = await fetch(`${BASE_URL}/forecast?city=${city}`); // Updated to fetch from the deployed backend
     if (!response.ok) throw new Error("Forecast data not available");
     return response.json();
 }
