@@ -10,13 +10,24 @@ const humidity = document.getElementById("humidity");
 const windSpeed = document.getElementById("wind-speed");
 const chartCanvas = document.getElementById("temperature-chart");
 const mapContainer = document.getElementById("map");
+const loadingIndicator = document.getElementById("loading-indicator");
 
 let temperatureChart;
-let map;  // Leaflet map object
+let map; // Leaflet map object
 
 let requestCount = 0; // Track number of requests
 let isRequestLimitReached = false; // Flag to check if the limit is reached
 const maxRequestsPerMinute = 60; // Max requests per minute
+
+// Show the loading indicator
+function showLoading() {
+    loadingIndicator.classList.remove("hidden");
+}
+
+// Hide the loading indicator
+function hideLoading() {
+    loadingIndicator.classList.add("hidden");
+}
 
 // Search button click event
 searchButton.addEventListener("click", async () => {
@@ -28,20 +39,23 @@ searchButton.addEventListener("click", async () => {
     }
 
     errorMessage.textContent = "";
+    showLoading(); // Show loading indicator
     try {
         const weatherData = await fetchWeatherData(city);
         updateWeatherInfo(weatherData);
         const forecastData = await fetchForecastData(city);
         updateChart(forecastData);
-        displayMap(weatherData.coord.lat, weatherData.coord.lon);  // Display map based on lat/lon
+        displayMap(weatherData.coord.lat, weatherData.coord.lon); // Display map
     } catch (error) {
         errorMessage.textContent = "Unable to fetch weather data. Please try again.";
+    } finally {
+        hideLoading(); // Hide loading indicator
     }
 });
 
 // Function to update the request count display
 function updateRequestCountDisplay() {
-    const requestCountDisplay = document.getElementById('request-count');
+    const requestCountDisplay = document.getElementById("request-count");
     requestCountDisplay.innerHTML = `Requests made: ${requestCount} / ${maxRequestsPerMinute}`;
 }
 
@@ -79,14 +93,14 @@ async function fetchWeatherData(city) {
     updateRequestCountDisplay();
 
     // Now we call the backend to get weather data (backend endpoint)
-    const response = await fetch(`${BASE_URL}/weather?city=${city}`); // Updated to fetch from the deployed backend
+    const response = await fetch(`${BASE_URL}/weather?city=${city}`);
     if (!response.ok) throw new Error("City not found");
     return response.json();
 }
 
 // Fetch forecast data from the backend
 async function fetchForecastData(city) {
-    const response = await fetch(`${BASE_URL}/forecast?city=${city}`); // Updated to fetch from the deployed backend
+    const response = await fetch(`${BASE_URL}/forecast?city=${city}`);
     if (!response.ok) throw new Error("Forecast data not available");
     return response.json();
 }
@@ -133,11 +147,12 @@ function updateChart(data) {
 function displayMap(lat, lon) {
     // Initialize the map only once
     if (!map) {
-        map = L.map(mapContainer).setView([lat, lon], 10);  // Set initial view (latitude, longitude, zoom level)
+        map = L.map(mapContainer).setView([lat, lon], 10); // Set initial view (latitude, longitude, zoom level)
 
         // Add OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
     }
 
